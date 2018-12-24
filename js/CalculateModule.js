@@ -1,0 +1,346 @@
+/** CalculateModule 型钢重量、截面积、表面积计算模块
+ *  calObj 输入参数：对象{}，包含以下格式数据
+ *  {
+ *    STCode = STCode; //必需有，判定型钢种类，选择相应的计算公式
+ *    hig: hig, //高度，可选
+ *    bre: bre, //宽度，可选
+ *    dic: dic, //腰厚，可选
+ *    tic: tic, //边厚度，可选
+ *    rad: rad, //内弧度，可选
+ *    ces: ces, //突出高度，可选
+ *    dad: dad  //直径，可选
+ *  }
+ *  result 输出结果：对象{}，包含以下格式数据
+ *  {
+ *    STCode ：STCode, //型钢种类
+ *    are: are, //截面面积
+ *    wg: wg, //重量
+ *    sare: sare //外表面积（不含截面积）
+ *  }
+ */
+
+const CalculateModule = function(calObj) {
+  console.log('调用函数引用的参数calObj:')
+  console.log(calObj);
+  console.log();
+  let par = new CalParametric();
+  for (let key in calObj) {
+    par[key] = calObj[key] || 0;
+  }
+
+  let result = new CalResult();
+  result = calProcess(par);
+  console.log('计算结果result:');
+  console.log(result);
+  console.log();
+  return result;
+
+  function calProcess(par) {
+    console.log('计算使用参数par:');
+    console.log(par);
+    console.log();
+    let are, wg, sare, wg2,
+      PI = 3.1415,
+      STCode = par.STCode || 0,
+      hig = par.hig || 0,
+      _bre = par.bre || 0,
+      dic = par.dic || 0,
+      tic = par.tic || 0,
+      _rad = par.rad || 0,
+      ces = par.ces || 0,
+      dad = par.dad || 0,
+      bre, rad, Rad, coe, amend, has_rad, Crad;
+
+    let CalCode = (STCode) ? STCode.replace(/[^A-Z]/g, '') : alert('错误：缺少型钢类型参数[STCode]');
+    switch (CalCode) {
+      case 'AI':
+        bre = !_bre ? hig : _bre;
+        rad = !_rad ? radAI() : _rad;
+        calAI();
+        break;
+      case 'IB':
+        bre = _bre;
+        coe = 0.615;
+        rad = _rad;
+        amend = PI * rad * 2 / 4 * 8;
+        Crad = (rad * rad - tic / 3 * tic / 3);
+        calHB();
+        break;
+      case 'HB':
+      case 'WB':
+        bre = _bre;
+        coe = 0.8584;
+        rad = _rad;
+        if (rad && (rad.toString() !== 'NaN')) {
+          amend = PI * rad * 2 / 4 * 8;
+          has_rad = true;
+        } else {
+          amend = 0;
+          has_rad = false;
+        }
+        Crad = (has_rad) ? (rad * rad - tic / 3 * tic / 3) : 0;
+        calHB();
+        break;
+      case 'CS':
+        coe = 0.349;
+        bre = _bre;
+        rad = _rad;
+        Crad = rad * rad - tic / 3 * tic / 3;
+        amend = PI * rad * 2 / 4 * 4;
+        calHB();
+      case 'TB':
+        coe = 0.4292;
+        bre = _bre;
+        rad = _rad;
+        Crad = rad * rad - tic / 3 * tic / 3;
+        amend = PI * rad * 2 / 4 * 4;
+        calTB();
+        break;
+      case 'CT':
+      case 'ZT':
+        bre = _bre;
+        calCT();
+        break;
+      case 'RB':
+      case 'SS':
+      case 'SP':
+        Idad = !tic ? 0 : (dad - 2 * tic);
+        calRB();
+        break;
+      case 'RT':
+        bre = !_bre ? hig : _bre;
+        Rad = radRT();
+        rad = !_rad ? (Rad - tic) : _rad;
+        calRT();
+        break;
+      case 'SSP':
+        calSSP();
+        break;
+    }
+
+    function calAI() {
+      are = (tic * (hig + bre - tic) + 0.215 * (rad * rad - 2 * tic / 3 * tic / 3)) / 100;
+      wg = 0.00785 * (tic * (hig + bre - tic) + 0.215 * (rad * rad - 2 * tic / 3 * tic / 3));
+      sare = ((hig + bre) * 2 - (tic * 2) + 2 * rad + PI * rad * 2 / 2) / 1000 * 1;
+      return {
+        are: are,
+        wg: wg,
+        sare: sare
+      }
+    }
+
+    function calHB() {
+      are = (hig * dic + 2 * tic * (bre - dic) + coe * Crad) / 100;
+      wg = 0.00785 * (hig * dic + 2 * tic * (bre - dic) + coe * Crad);
+      sare = ((hig + bre) * 2 + (bre * 2) - (dic * 2) - (tic * 2) + amend) / 1000 * 1;
+      return {
+        are: are,
+        wg: wg,
+        sare: sare
+      }
+    }
+
+    function calTB() {
+      are = (hig * dic + tic * (bre - dic) + coe * Crad) / 100;
+      wg = 0.00785 * (hig * dic + tic * (bre - dic) + coe * Crad);
+      sare = ((hig + bre) * 2 - (dic * 1) - (tic * 1) + amend) / 1000 * 1;
+      return {
+        are: are,
+        wg: wg,
+        sare: sare
+      }
+    }
+
+    function calCT() {
+      are = (hig + 2 * bre + 2 * ces) * tic / 100;
+      wg = 0.00785 * (hig + 2 * bre + 2 * ces) * tic;
+      sare = ((hig + bre + ces) * 2 - (dic * 2) - (tic * 2)) / 1000 * 1;
+      return {
+        are: are,
+        wg: wg,
+        sare: sare
+      }
+    }
+
+    function calRB() {
+      are = PI * (dad * dad - Idad * Idad) / 4 / 100;
+      wg = !Idad ? (0.00617 * dad * dad) : (0.02466 * tic * (dad - tic));
+      sare = PI * dad * 2 / 1000 * 1;
+      return {
+        are: are,
+        wg: wg,
+        sare: sare
+      }
+    }
+
+    function calRT() {
+      are = (hig * bre - (tic * tic * 4 - PI * tic * tic) - ((hig - 2 * tic) * (bre - 2 * tic) - (tic * tic * 4 - PI * tic * tic))) / 100,
+        wg = 0.00785 * are * 100,
+        sare = (2 * (hig - tic + bre - tic) + PI * Rad * 2 / 4 * 4) / 100 * 1
+      return {
+        are: are,
+        wg: wg,
+        sare: sare
+      }
+    }
+
+    function calSSP() {
+      wg2 = 0.00785 * tic * 1000;
+      are = tic * 1000 / 100;
+      return {
+        are: are,
+        wg2: wg2
+      }
+    }
+    //radAI 角钢内半径取值函数
+    function radAI() {
+      let r,
+        h = hig;
+      //叛断等边还是不等边角钢
+      if (hig == bre) {
+        if (h && h <= 25) {
+          r = 3.5;
+        } else if (h <= 36) {
+          r = 4.5;
+        } else if (h <= 45) {
+          r = 5;
+        } else if (h <= 50) {
+          r = 5.5;
+        } else if (h <= 56) {
+          r = 6;
+        } else if (h <= 60) {
+          r = 6.5;
+        } else if (h <= 63) {
+          r = 7;
+        } else if (h <= 70) {
+          r = 8;
+        } else if (h <= 80) {
+          r = 9;
+        } else if (h <= 90) {
+          r = 10;
+        } else if (h <= 110) {
+          r = 12;
+        } else if (h <= 150) {
+          r = 14;
+        } else if (h <= 180) {
+          r = 16;
+        } else if (h <= 200) {
+          r = 18;
+        } else if (h <= 220) {
+          r = 21;
+        } else if (h <= 250) {
+          r = 24;
+        } else {
+          //throw new error("等边角钢边长" + h + ">250,规格超出本计算程序计算上限");
+          alert("等边角钢边长" + h + ">250,规格超出本计算程序计算上限");
+        }
+      } else {
+        if (h && h <= 32) {
+          r = 3.5;
+        } else if (h <= 40) {
+          r = 4;
+        } else if (h <= 45) {
+          r = 5;
+        } else if (h <= 50) {
+          r = 5.5;
+        } else if (h <= 56) {
+          r = 6;
+        } else if (h <= 63) {
+          r = 7;
+        } else if (h <= 70) {
+          r = 7.5;
+        } else if (h <= 80) {
+          r = 8;
+        } else if (h <= 90) {
+          r = 9;
+        } else if (h <= 110) {
+          r = 10;
+        } else if (h <= 125) {
+          r = 11;
+        } else if (h <= 150) {
+          r = 12;
+        } else if (h <= 160) {
+          r = 13;
+        } else if (h <= 200) {
+          r = 14;
+        } else {
+          //throw new error("不等边角钢长边长" + h + ">200,规格超出本计算程序计算上限");
+          alert("不等边角钢长边长" + h + ">200,规格超出本计算程序计算上限");
+        }
+      }
+      return r;
+    }
+    //方管和矩形管的圆角
+    function radRT() {
+      let r,
+        t = tic;
+      switch (true) {
+        case t <= 3:
+          r = 1.5 * t;
+          break;
+        case t <= 6:
+          r = 2 * t;
+          break;
+        case t <= 10:
+          r = 2.5 * t;
+          break;
+        case t <= 16:
+          r = 3 * t;
+          break;
+        case t > 16:
+          r = 3.5 * t;
+          break;
+      }
+      return r;
+    }
+    //输出数据保留小数，其中toFixed()函数决定保留几位小数
+    function numToFixed(obj) {
+      if (Array.isArray(obj)) {
+        for (let i = 0; i < obj.length; i++) {
+          obj[i] = (obj[i]) ? arr[i].toFixed(3) : obj[i];
+        }
+      } else if (obj) {
+        obj = obj.toFixed(3);
+      }
+      return obj;
+    }
+
+    if (CalCode == 'SSP') {
+      return {
+        are: numToFixed(are),
+        wg2: numToFixed(wg2)
+      }
+    } else {
+      return {
+        are: numToFixed(are),
+        wg1: numToFixed(wg),
+        sare: numToFixed(sare)
+      }
+    }
+
+  }
+}
+
+class CalParametric {
+  constructor(STCode, hig, bre, dic, tic, rad, ces, dad) {
+    this.STCode = STCode;
+    this.hig = hig;
+    this.bre = bre;
+    this.dic = dic;
+    this.tic = tic;
+    this.rad = rad;
+    this.ces = ces;
+    this.dad = dad;
+  }
+}
+
+class CalResult {
+  constructor(are, wg1, sare, wg2) {
+    this.are = are;
+    this.wg1 = wg1;
+    this.sare = sare;
+    this.wg2 = wg2;
+  }
+}
+
+//export default CalculateModule
