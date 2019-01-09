@@ -42,15 +42,15 @@ const CalculateModule = function(calObj) {
     console.log();
     let are, wg, sare, wg2,
       PI = 3.1415,
-      density = par.dinsity || 7.85,
+      density = Number(par.dinsity) || 7.85,
       STCode = par.STCode || 0,
-      hig = par.hig || 0,
-      _bre = par.bre || 0,
-      dic = par.dic || 0,
-      tic = par.tic || 0,
-      _rad = par.rad || 0,
-      ces = par.ces || 0,
-      dad = par.dad || 0,
+      hig = Number(par.hig) || 0,
+      _bre = Number(par.bre) || 0,
+      dic = Number(par.dic) || 0,
+      tic = Number(par.tic) || 0,
+      _rad = Number(par.rad) || 0,
+      ces = Number(par.ces) || 0,
+      dad = Number(par.dad) || 0,
       bre, rad, Rad, coe, amend, has_rad, Crad, Section;
 
     let CalCode = (STCode) ? STCode.replace(/[^A-Z]/g, '') : alert('错误：缺少型钢类型参数[STCode]');
@@ -95,6 +95,7 @@ const CalculateModule = function(calObj) {
         Crad = rad * rad - tic / 3 * tic / 3;
         amend = PI * rad * 2 / 4 * 4;
         calHB();
+        break;
       case 'TB':
         coe = 0.4292;
         bre = _bre;
@@ -127,9 +128,9 @@ const CalculateModule = function(calObj) {
 
     function calAI() {
       Section = (tic * (hig + bre - tic) + 0.215 * (rad * rad - 2 * tic / 3 * tic / 3));
-      are = Section / 10000;
-      wg = density * Section / 10000;
-      sare = ((hig + bre) * 2 -  (tic * 2) - 2 * rad + PI * rad * 2 / 2) / 10000;
+      are = Section / 100;
+      wg = density * Section / 1000;
+      sare = ((hig + bre) * 2 -  (tic * 2) - 2 * rad + PI * rad * 2 / 2) / 1000;
       return {
         are: are,
         wg: wg,
@@ -139,8 +140,8 @@ const CalculateModule = function(calObj) {
 
     function calLT() {
       Section = (hig * dic + tic * (bre - dic) + 0.215 * (rad * rad - 2 * rad / 2 * rad / 2));
-      are =  Section / 10000;
-      wg = density * Section / 10000;
+      are =  Section / 100;
+      wg = density * Section / 1000;
       sare = ((hig + bre) * 2 -  (dic + tic) -( rad + rad / 2) + PI * (rad + rad / 2) * 2 / 4) / 1000 * 1;
       return {
         are: are,
@@ -153,7 +154,7 @@ const CalculateModule = function(calObj) {
       Section = (hig * dic + 2 * tic * (bre - dic) + coe * Crad);
       are =  Section / 100;
       wg = density * Section / 1000;
-      sare = ((hig + bre) * 2 + (bre * 2) - (dic * 2) - (tic * 4) + amend - 12 * rad) / 1000000;
+      sare = ((hig + bre) * 2 + (bre * 2) - (dic * 2) - (tic * 4) + amend - 12 * rad) / 1000;
       return {
         are: are,
         wg: wg,
