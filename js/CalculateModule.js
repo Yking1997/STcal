@@ -1,7 +1,8 @@
 /** CalculateModule 型钢重量、截面积、表面积计算模块
  *  calObj 输入参数：对象{}，包含以下格式数据
  *  {
- *    STCode = STCode; //必需有，判定型钢种类，选择相应的计算公式
+ *    density: density; //必需有，判定型钢密度，
+ *    STCode: STCode; //必需有，判定型钢种类，选择相应的计算公式
  *    hig: hig, //高度，可选
  *    bre: bre, //宽度，可选
  *    dic: dic, //腰厚，可选
@@ -41,6 +42,7 @@ const CalculateModule = function(calObj) {
     console.log();
     let are, wg, sare, wg2,
       PI = 3.1415,
+      density = par.dinsity || 7.85,
       STCode = par.STCode || 0,
       hig = par.hig || 0,
       _bre = par.bre || 0,
@@ -49,7 +51,7 @@ const CalculateModule = function(calObj) {
       _rad = par.rad || 0,
       ces = par.ces || 0,
       dad = par.dad || 0,
-      bre, rad, Rad, coe, amend, has_rad, Crad;
+      bre, rad, Rad, coe, amend, has_rad, Crad, Section;
 
     let CalCode = (STCode) ? STCode.replace(/[^A-Z]/g, '') : alert('错误：缺少型钢类型参数[STCode]');
     switch (CalCode) {
@@ -57,6 +59,11 @@ const CalculateModule = function(calObj) {
         bre = !_bre ? hig : _bre;
         rad = !_rad ? radAI() : _rad;
         calAI();
+        break;
+      case 'LT':
+        bre = _bre;
+        rad = !_rad ? radAI() : _rad;
+        calLT();
         break;
       case 'IB':
         bre = _bre;
@@ -119,9 +126,22 @@ const CalculateModule = function(calObj) {
     }
 
     function calAI() {
-      are = (tic * (hig + bre - tic) + 0.215 * (rad * rad - 2 * tic / 3 * tic / 3)) / 100;
-      wg = 0.00785 * (tic * (hig + bre - tic) + 0.215 * (rad * rad - 2 * tic / 3 * tic / 3));
-      sare = ((hig + bre) * 2 - (tic * 2) + 2 * rad + PI * rad * 2 / 2) / 1000 * 1;
+      Section = (tic * (hig + bre - tic) + 0.215 * (rad * rad - 2 * tic / 3 * tic / 3));
+      are = Section / 10000;
+      wg = density * Section / 10000;
+      sare = ((hig + bre) * 2 -  (tic * 2) - 2 * rad + PI * rad * 2 / 2) / 10000;
+      return {
+        are: are,
+        wg: wg,
+        sare: sare
+      }
+    }
+
+    function calLT() {
+      Section = (hig * dic + tic * (bre - dic) + 0.215 * (rad * rad - 2 * rad / 2 * rad / 2));
+      are =  Section / 10000;
+      wg = density * Section / 10000;
+      sare = ((hig + bre) * 2 -  (dic + tic) -( rad + rad / 2) + PI * (rad + rad / 2) * 2 / 4) / 1000 * 1;
       return {
         are: are,
         wg: wg,
@@ -130,9 +150,10 @@ const CalculateModule = function(calObj) {
     }
 
     function calHB() {
-      are = (hig * dic + 2 * tic * (bre - dic) + coe * Crad) / 100;
-      wg = 0.00785 * (hig * dic + 2 * tic * (bre - dic) + coe * Crad);
-      sare = ((hig + bre) * 2 + (bre * 2) - (dic * 2) - (tic * 2) + amend) / 1000 * 1;
+      Section = (hig * dic + 2 * tic * (bre - dic) + coe * Crad);
+      are =  Section / 100;
+      wg = density * Section / 1000;
+      sare = ((hig + bre) * 2 + (bre * 2) - (dic * 2) - (tic * 4) + amend - 12 * rad) / 1000000;
       return {
         are: are,
         wg: wg,
@@ -141,9 +162,10 @@ const CalculateModule = function(calObj) {
     }
 
     function calTB() {
-      are = (hig * dic + tic * (bre - dic) + coe * Crad) / 100;
-      wg = 0.00785 * (hig * dic + tic * (bre - dic) + coe * Crad);
-      sare = ((hig + bre) * 2 - (dic * 1) - (tic * 1) + amend) / 1000 * 1;
+      Section = (hig * dic + tic * (bre - dic) + coe * Crad);
+      are = Section / 100;
+      wg = density * Section / 1000;
+      sare = ((hig + bre) * 2 - (dic * 1) - (tic * 2) + amend - 6 * rad) / 1000;
       return {
         are: are,
         wg: wg,
@@ -152,9 +174,10 @@ const CalculateModule = function(calObj) {
     }
 
     function calCT() {
-      are = (hig + 2 * bre + 2 * ces) * tic / 100;
-      wg = 0.00785 * (hig + 2 * bre + 2 * ces) * tic;
-      sare = ((hig + bre + ces) * 2 - (dic * 2) - (tic * 2)) / 1000 * 1;
+      Section = (hig + 2 * bre + 2 * ces) * tic;
+      are =  Section / 100;
+      wg = density * Section / 1000;
+      sare = ((hig + bre + ces) * 2 - (dic * 2) - (tic * 2)) / 1000;
       return {
         are: are,
         wg: wg,
@@ -163,9 +186,10 @@ const CalculateModule = function(calObj) {
     }
 
     function calRB() {
-      are = PI * (dad * dad - Idad * Idad) / 4 / 100;
+      Section = PI * (dad * dad - Idad * Idad) / 4;
+      are = Section / 100;
       wg = !Idad ? (0.00617 * dad * dad) : (0.02466 * tic * (dad - tic));
-      sare = PI * dad * 2 / 1000 * 1;
+      sare = PI * dad * 2 / 1000;
       return {
         are: are,
         wg: wg,
@@ -174,9 +198,10 @@ const CalculateModule = function(calObj) {
     }
 
     function calRT() {
-      are = (hig * bre - (tic * tic * 4 - PI * tic * tic) - ((hig - 2 * tic) * (bre - 2 * tic) - (tic * tic * 4 - PI * tic * tic))) / 100,
-        wg = 0.00785 * are * 100,
-        sare = (2 * (hig - tic + bre - tic) + PI * Rad * 2 / 4 * 4) / 100 * 1
+      Section = (hig * bre - (tic * tic * 4 - PI * tic * tic) - ((hig - 2 * tic) * (bre - 2 * tic) - (tic * tic * 4 - PI * tic * tic)));
+      are =  Section / 100;
+        wg = density * Section / 1000;
+        sare = (2 * (hig - tic + bre - tic) + PI * Rad * 2 / 4 * 4) / 100;
       return {
         are: are,
         wg: wg,
@@ -185,7 +210,7 @@ const CalculateModule = function(calObj) {
     }
 
     function calSSP() {
-      wg2 = 0.00785 * tic * 1000;
+      wg2 = density * tic;
       are = tic * 1000 / 100;
       return {
         are: are,
@@ -263,9 +288,13 @@ const CalculateModule = function(calObj) {
           r = 13;
         } else if (h <= 200) {
           r = 14;
+        } else if (h <= 300) {
+          r = 15;
+        } else if (h <= 500) {
+          r = 20;
         } else {
           //throw new error("不等边角钢长边长" + h + ">200,规格超出本计算程序计算上限");
-          alert("不等边角钢长边长" + h + ">200,规格超出本计算程序计算上限");
+          alert("不等边角钢(或L型钢)长边长" + h + ">500,规格超出本计算程序计算上限");
         }
       }
       return r;
