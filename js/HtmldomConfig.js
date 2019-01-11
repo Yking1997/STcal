@@ -353,7 +353,7 @@ const Meth = function() {
     save.resultTxt = save.headTxt + '\n' + save.middleTxt + '\n' + save.tailTxt + '\n';
 
     save.compareTxt1 = save.resultTxt;
-    save.compareTxt1 = save.compareTxt1.substring(save.compareTxt1.indexOf(']'), save.compareTxt1.length);
+    save.compareTxt2 = save.compareTxt1.substring(save.compareTxt1.indexOf(']'), save.compareTxt1.length);
     for (let i = 0; i < save.len; i++) {
       if (isEmpty(save.txtArr[i]) === false) {
         save.compareTxt2 = save.txtArr[i].toString();

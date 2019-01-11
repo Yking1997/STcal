@@ -13,7 +13,7 @@
  *                exDataPar：扩展数据参数名称
  *                exData：扩展数据参数（截面系数）
  */
-const baseMap = {
+var baseMap = {
   h08eqAI: {
     symbol: '∠ ',
     chinese: '热轧等边角钢（GB/T706-2008）',
