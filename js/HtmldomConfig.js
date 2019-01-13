@@ -231,6 +231,13 @@ const makeEleMap = {
 };
 
 makeEleForDiv(makeEleMap);
+setSelectNull('selSTList');
+
+function setSelectNull(id) {
+  let x = getEle.Id(id);
+  x.selectedIndex = 'note';
+}
+
 
 opMap.DivIdLies = function() {
   let listobj = {};
@@ -342,6 +349,7 @@ const Meth = function() {
     save.tailTxt = '计算结果：' + '\n';
 
     for (let key in user.Parvalue) {
+      if (!user.Parvalue[key]) { save.isSave = false; }
       save.headTxt += String(user.Parvalue[key]) + 'x';
       save.middleTxt += String(user.Parprop[key]) + ': ' + String(user.Parvalue[key]) + ' ' + String(user.Parunit[key]) + '\n';
     }
@@ -383,30 +391,49 @@ const Meth = function() {
     }
   }
 
+
   function sel02ST() {
-    let leg, selNum, selTxt, data, obj = {};
-    leg = Number(getOptVal('sunSTList'));
+    let leg, temp, selNum, selTxt, data, obj = {};
+    temp = getOptVal('sunSTList');
+    if (temp == 'note'|| temp == '') {
+       errorLog();
+    } else {
+       leg = Number(temp);
+    } 
     selNum = getOptVal('selSTList');
-    user = new User();
+    if (selNum == 'note'|| selNum == '') {
+      errorLog();
+    } else {
+      user = new User();
 
-    user.STCode = obj.STCode = selTxt = initMap.selSTCode[selNum];
+      user.STCode = obj.STCode = selTxt = initMap.selSTCode[selNum];
 
-    data = copy(initMap[selTxt].data[leg], true);
+      data = copy(initMap[selTxt].data[leg], true);
 
 
-    user.Parvalue = {};
-    for (let key in data) {
-      user.Parvalue[key] = obj[key] = copy(data[key],true);
+      user.Parvalue = {};
+      for (let key in data) {
+        user.Parvalue[key] = obj[key] = copy(data[key],true);
+      }
+    
+      ConsoleLogObj(obj);
+      CalForObj(obj);
+      FindForObj(obj);
+      UpdateToUser();
     }
-
-    ConsoleLogObj(obj);
-    CalForObj(obj);
-    FindForObj(obj);
-    UpdateToUser();
+    
   }
+
+  function errorLog() {
+    ClearObjKey(user);
+    user = new User();
+    ClearDiv();
+    console.log('未选择正确型钢型号');
+  }  
+
   ////对给定的obj执行控制台显示内容
   function ConsoleLogObj(obj) {
-    let str = JSON.stringify(obj);
+    let str = (typeof(obj) == 'string') ? obj : JSON.stringify(obj);
     console.log(str);
   }
   //对给定的obj执行计算
@@ -434,8 +461,12 @@ const Meth = function() {
     temTxt = (selTxt) ? selTxt.replace(/[^eq|un|A-Z]/g, '') : '';
     selImg.src = (temTxt) ? `./images/${temTxt}.jpg` : `./images/default.jpg`;
     if (temTxt) {
-      makeSelOptForArrTab('sunSTList', initMap[selTxt].selTab, '--请选择型号--');
+      makeSelOptForArrTab('sunSTList', initMap[selTxt].selTab, '--请选择具体型号--');
+      setSelectNull('sunSTList');      
+    } else {
+      removeAllOptions('sunSTList');
     }
+    
     ClearDiv();
   }
 
