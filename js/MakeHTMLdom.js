@@ -150,6 +150,8 @@ function makeEleForDiv(objDivData) {
   };
 
   makeSelOptForArrTab('selSTList', initMap.selSTTab, '--请选择型钢种类--');
+  //makeSelOptForArrTab('selSTList', initMap.selSTTab);
+  
 };
 
 
@@ -171,7 +173,7 @@ function addOption(id, txt, val) {
 
 
 //删除所有选项option
-function removeAll(id) {
+function removeAllOptions(id) {
   let obj = getEle.Id(id);
   obj.options.length = 0;
 }
@@ -227,13 +229,13 @@ function makeSelOptForArrTab(selName, arrTab, text0) {
     temArr = copy(arrTab, true),
     txt = '';
   //清空所有option，如不清空，第二次运行就有可能会出现残余显示
-  removeAll(creName);
+  removeAllOptions(creName);
   //createselect( creName );
   //addSelOnChange( creName, opAndCalPrm() );
-  for (let i = 0; i < temArr.length; i++) {
-    if (i === 0) {
+  for (let i = -1; i < temArr.length; i++) {
+    if (i === -1) {
       //0值创建成显提示标题，对应数据数组不参与取值
-      addOption(creName, text0, 0);
+      addOption(creName, text0, 'note');
     } else {
       txt = temArr[i].toString();
       addOption(creName, txt, i);
