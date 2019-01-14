@@ -154,14 +154,7 @@ const makeEleMap = {
           columnLabel: 'value',
           title: '参数修改后请按回车键执行计算'
         }
-        /*,
-        meth: {
-          type: 'keypress',
-          fn: function() {
-            Meth.altDiv();
-          }
-        }
-        */
+       
       },
       unit: {
         type: 'div',
@@ -246,7 +239,7 @@ opMap.DivIdLies = function() {
     let _meth = _item + 'Meth';
     listobj[_item] = document.querySelectorAll(item);
 
-    //defineProperty(user, _item, _meth);
+    
 
   })
   return listobj;
@@ -266,12 +259,12 @@ const Meth = function() {
       user.Calunit[key] = copy(Oc.unit[key],true);
     }
     //根据value的key名查找对应prop和unit的key名的值
-    if (user.Refvalue) {
+    
       for (let key in user.Refvalue) {
         user.Refprop[key] = copy(Or.prop[key],true);
         user.Refunit[key] = copy(Or.unit[key],true);
       }
-    }
+    
 
     //根据value的key名查找对应prop和unit的key名的值
     for (let key in user.Parvalue) {
@@ -393,35 +386,37 @@ const Meth = function() {
 
 
   function sel02ST() {
-    let leg, temp, selNum, selTxt, data, obj = {};
-    temp = getOptVal('sunSTList');
-    if (temp == 'note'|| temp == '') {
-       errorLog();
-    } else {
-       leg = Number(temp);
-    } 
+    let leg, selNum;
+    leg = getOptVal('sunSTList');
+    
     selNum = getOptVal('selSTList');
     if (selNum == 'note'|| selNum == '') {
       errorLog();
-    } else {
-      user = new User();
+    } else { 
+      if (leg == 'note'|| leg == '') {
+        errorLog();
+      } else {
+        let num, selTxt, data, obj = {};
+        num = Number(leg);
+   
+        user = new User();
 
-      user.STCode = obj.STCode = selTxt = initMap.selSTCode[selNum];
+        user.STCode = obj.STCode = selTxt = initMap.selSTCode[selNum];
 
-      data = copy(initMap[selTxt].data[leg], true);
+        data = copy(initMap[selTxt].data[num], true);
 
 
-      user.Parvalue = {};
-      for (let key in data) {
-        user.Parvalue[key] = obj[key] = copy(data[key],true);
+        user.Parvalue = {};
+          for (let key in data) {
+            user.Parvalue[key] = obj[key] = copy(data[key],true);
+          }
+    
+        ConsoleLogObj(obj);
+        CalForObj(obj);
+        FindForObj(obj);
+        UpdateToUser();
       }
-    
-      ConsoleLogObj(obj);
-      CalForObj(obj);
-      FindForObj(obj);
-      UpdateToUser();
     }
-    
   }
 
   function errorLog() {
@@ -491,7 +486,7 @@ const Meth = function() {
         n++
       }
 
-      //setTimeout('removeDivBr()', 0);
+      
       obj.STCode = copy(user.STCode,true);
 
       ConsoleLogObj(obj);

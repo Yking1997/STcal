@@ -97,8 +97,7 @@ function makeEleForDiv(objDivData) {
     }
 
     if (meth) {
-     obj.addEventListener(meth.type, meth.fn, false);
-     //obj.onchange = meth.fn;
+     obj.addEventListener(meth.type, meth.fn, false);     
     }
 
     if (parentDivId) {
@@ -149,9 +148,7 @@ function makeEleForDiv(objDivData) {
     }
   };
 
-  makeSelOptForArrTab('selSTList', initMap.selSTTab, '--请选择型钢种类--');
-  //makeSelOptForArrTab('selSTList', initMap.selSTTab);
-  
+  makeSelOptForArrTab('selSTList', initMap.selSTTab, '--请选择型钢种类--');  
 };
 
 
@@ -168,7 +165,7 @@ function addOption(id, txt, val) {
   let obj = getEle.Id(id);
   //添加一个选项
   obj.add(new Option(txt, val));
-  //obj.fireEvenh("onchange");
+  
 }
 
 
@@ -181,8 +178,8 @@ function removeAllOptions(id) {
 //获得选项option的值
 function getOptVal(id) {
   let obj = (getEle.Id(id)) ? getEle.Id(id) : '';
-  let index = (obj.selectedIndex) ? obj.selectedIndex : ''; //序号，取当前选中选项的序号
-  let val = (index) ? obj.options[index].value : '';
+  let index = obj.selectedIndex; //序号，取当前选中选项的序号
+  let val =  obj.options[index].value;
   return val;
 }
 
@@ -230,8 +227,7 @@ function makeSelOptForArrTab(selName, arrTab, text0) {
     txt = '';
   //清空所有option，如不清空，第二次运行就有可能会出现残余显示
   removeAllOptions(creName);
-  //createselect( creName );
-  //addSelOnChange( creName, opAndCalPrm() );
+  
   for (let i = -1; i < temArr.length; i++) {
     if (i === -1) {
       //0值创建成显提示标题，对应数据数组不参与取值
