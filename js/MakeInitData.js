@@ -25,8 +25,7 @@
     newMap[prop] = {
       data: {},
       selTab: [],
-      exData: {},
-      calculate: copy(baseMap[prop].calculate, true),
+      exData: {},      
       dataPar: copy(baseMap[prop].dataPar, true),
       exDataPar: copy(baseMap[prop].exDataPar, true),
       outputPar: copy(baseMap[prop].output, true),
@@ -376,3 +375,4 @@ class User {
 }
 
 var user = new User();
+baseMap = {};
