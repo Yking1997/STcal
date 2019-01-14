@@ -480,7 +480,7 @@ const Meth = function() {
       delDivBr();
 
       for (let key in obj) {
-        arrTxt[n].innerText = arrTxt[n].innerText.replace(/[^.0-9]/g, '');
+        arrTxt[n].innerText = arrTxt[n].innerText.replace(/[^.0-9]/g, '') || 0;
 
         obj[key] = arrTxt[n].innerText;
         n++

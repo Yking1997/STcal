@@ -51,19 +51,28 @@ const CalculateModule = function(calObj) {
       _rad = Number(par.rad) || 0,
       ces = Number(par.ces) || 0,
       dad = Number(par.dad) || 0,
-      bre, rad, Rad, coe, amend, has_rad, Crad, Section;
+      bre, rad, Rad, coe, amend, has_rad, Crad, Section,
+      Error_Paris0 = '你输入数据有误，请重新输入大于0的数值。';
 
     let CalCode = (STCode) ? STCode.replace(/[^A-Z]/g, '') : alert('错误：缺少型钢类型参数[STCode]');
     switch (CalCode) {
       case 'AI':
         bre = !_bre ? hig : _bre;
         rad = !_rad ? radAI() : _rad;
-        calAI();
+        if (hig&&bre) {
+          calAI();
+        } else {
+          alert(Error_Paris0);
+        }
         break;
       case 'LT':
         bre = _bre;
         rad = !_rad ? radAI() : _rad;
-        calLT();
+        if (hig&&bre) {
+          calLT();
+        } else {
+          alert(Error_Paris0);
+        }        
         break;
       case 'IB':
         bre = _bre;
@@ -71,7 +80,11 @@ const CalculateModule = function(calObj) {
         rad = _rad;
         amend = PI * rad * 2 / 4 * 8;
         Crad = (rad * rad - tic / 3 * tic / 3);
-        calHB();
+        if (hig&&bre&&dic&&tic) {
+          calHB();
+        } else {
+          alert(Error_Paris0);
+        }  
         break;
       case 'HB':
       case 'WB':
@@ -86,7 +99,11 @@ const CalculateModule = function(calObj) {
           has_rad = false;
         }
         Crad = (has_rad) ? (rad * rad - tic / 3 * tic / 3) : 0;
-        calHB();
+        if (hig&&bre&&dic&&tic) {
+          calHB();
+        } else {
+          alert(Error_Paris0);
+        }
         break;
       case 'CS':
         coe = 0.349;
@@ -94,7 +111,11 @@ const CalculateModule = function(calObj) {
         rad = _rad;
         Crad = rad * rad - tic / 3 * tic / 3;
         amend = PI * rad * 2 / 4 * 4;
-        calHB();
+        if (hig&&bre&&dic&&tic) {
+          calHB();
+        } else {
+          alert(Error_Paris0);
+        }
         break;
       case 'TB':
         coe = 0.4292;
@@ -102,27 +123,54 @@ const CalculateModule = function(calObj) {
         rad = _rad;
         Crad = rad * rad - tic / 3 * tic / 3;
         amend = PI * rad * 2 / 4 * 4;
-        calTB();
+        if (hig&&bre&&dic&&tic) {
+          calTB();
+        } else {
+          alert(Error_Paris0);
+        }
         break;
       case 'CT':
       case 'ZT':
         bre = _bre;
-        calCT();
+        if (hig&&bre&&dic&&tic) {
+          calCT();
+        } else {
+          alert(Error_Paris0);
+        }
         break;
       case 'RB':
+        Idad = !tic ? 0 : (dad - 2 * tic);
+        if (dad) {
+          calRB();
+        } else {
+          alert(Error_Paris0);
+        }        
+        break;
       case 'SS':
       case 'SP':
         Idad = !tic ? 0 : (dad - 2 * tic);
-        calRB();
+        if (dad&&tic) {
+          calRB();
+        } else {
+          alert(Error_Paris0);
+        }        
         break;
       case 'RT':
         bre = !_bre ? hig : _bre;
         Rad = radRT();
         rad = !_rad ? (Rad - tic) : _rad;
-        calRT();
+        if (hig&&bre&&tic) {
+          calRT();
+        } else {
+          alert(Error_Paris0);
+        }
         break;
       case 'SSP':
+      if (tic) {
         calSSP();
+      } else {
+        alert(Error_Paris0);
+      }        
         break;
     }
 
