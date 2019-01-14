@@ -1,7 +1,7 @@
 var baseMap = (baseMap) ? baseMap : {};
 baseMap.h10SP = {
   symbol: '◎ ',
-  chinese: '热轧电焊钢管',
+  chinese: '热轧电焊钢管 (2010)',
   english: 'Electric Welded Steel Pipe',
   calculate: 'calRound',
   output: ['wg1', 'are', 'Sare'],

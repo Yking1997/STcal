@@ -1,7 +1,7 @@
 var baseMap = (baseMap) ? baseMap : {};
 baseMap.h08RB2 = {
   symbol: 'Φ ',
-  chinese: '螺纹钢',
+  chinese: '螺纹钢 (2008)',
   calculate: 'calRound',
   dataPar: ['dad'],
   output: ['wg1', 'are', 'Sare'],

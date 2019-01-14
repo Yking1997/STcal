@@ -1,7 +1,7 @@
 var baseMap = (baseMap) ? baseMap : {};
 baseMap.h10SS = {
   symbol: '◎ ',
-  chinese: '热轧无缝钢管',
+  chinese: '热轧无缝钢管 (2010)',
   calculate: 'calRound',
   output: ['wg1', 'are', 'Sare'],
   dataPar: ['dad', 'tic'],

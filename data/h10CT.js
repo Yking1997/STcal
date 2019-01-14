@@ -1,7 +1,7 @@
 var baseMap = (baseMap) ? baseMap : {};
 baseMap.h10CT = {
   symbol: 'C ',
-  chinese: 'C型钢',
+  chinese: 'C型钢 (2010)',
   calculate: 'calCTZT',
   output: ['wg1', 'are'],
   dataPar: ['hig', 'bre', 'ces', 'tic'],
