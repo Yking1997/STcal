@@ -119,8 +119,9 @@ function makeEleForDiv(objDivData) {
    * @return {[type]}             [description]
    */
   function makeTableByPDiv(rows, columns, attr, parentDivId) {
-    let obj = {};
-    
+    let obj = {},
+      n = 0;
+    let par = getEle.Id(parentDivId);
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < columns; j++) {
 

@@ -52,19 +52,15 @@ const CalculateModule = function(calObj) {
       ces = Number(par.ces) || 0,
       dad = Number(par.dad) || 0,
       bre, rad, Rad, coe, amend, has_rad, Crad, Section,
-      Error_Paris0 = '你输入数据有误，请重新输入大于0的数值。',
-      Error_ParisTicBig = '你输入厚度数据有误，请重新输入的数值。';
+      Error_Paris0 = '你输入数据有误，请重新输入大于0的数值。';
+
     let CalCode = (STCode) ? STCode.replace(/[^A-Z]/g, '') : alert('错误：缺少型钢类型参数[STCode]');
     switch (CalCode) {
       case 'AI':
         bre = !_bre ? hig : _bre;
         rad = !_rad ? radAI() : _rad;
-        if (hig&&bre&&tic) {
-          if ((hig>tic)&&(bre>tic)) {
-            calAI();
-          } else {
-            alert(Error_ParisTicBig);
-          }   
+        if (hig&&bre) {
+          calAI();
         } else {
           alert(Error_Paris0);
         }
@@ -72,12 +68,8 @@ const CalculateModule = function(calObj) {
       case 'LT':
         bre = _bre;
         rad = !_rad ? radAI() : _rad;
-        if (hig&&bre&&tic) {
-          if ((hig>tic)&&(bre>tic)) {
-            calLT();
-          } else {
-            alert(Error_ParisTicBig);
-          }       
+        if (hig&&bre) {
+          calLT();
         } else {
           alert(Error_Paris0);
         }        
@@ -89,11 +81,7 @@ const CalculateModule = function(calObj) {
         amend = PI * rad * 2 / 4 * 8;
         Crad = (rad * rad - tic / 3 * tic / 3);
         if (hig&&bre&&dic&&tic) {
-          if ((hig>tic)&&(bre>tic)&&(hig>dic)&&(bre>dic)) {
-            calHB();
-          } else {
-            alert(Error_ParisTicBig);
-          }   
+          calHB();
         } else {
           alert(Error_Paris0);
         }  
@@ -112,11 +100,7 @@ const CalculateModule = function(calObj) {
         }
         Crad = (has_rad) ? (rad * rad - tic / 3 * tic / 3) : 0;
         if (hig&&bre&&dic&&tic) {
-          if ((hig>tic)&&(bre>tic)&&(hig>dic)&&(bre>dic)) {
-            calHB();
-          } else {
-            alert(Error_ParisTicBig);
-          }   
+          calHB();
         } else {
           alert(Error_Paris0);
         }
@@ -128,11 +112,7 @@ const CalculateModule = function(calObj) {
         Crad = rad * rad - tic / 3 * tic / 3;
         amend = PI * rad * 2 / 4 * 4;
         if (hig&&bre&&dic&&tic) {
-          if ((hig>tic)&&(bre>tic)&&(hig>dic)&&(bre>dic)) {
-            calHB();
-          } else {
-            alert(Error_ParisTicBig);
-          }   
+          calHB();
         } else {
           alert(Error_Paris0);
         }
@@ -144,11 +124,7 @@ const CalculateModule = function(calObj) {
         Crad = rad * rad - tic / 3 * tic / 3;
         amend = PI * rad * 2 / 4 * 4;
         if (hig&&bre&&dic&&tic) {
-          if ((hig>tic)&&(bre>tic)&&(hig>dic)&&(bre>dic)) {
-            calTB();
-          } else {
-            alert(Error_ParisTicBig);
-          }   
+          calTB();
         } else {
           alert(Error_Paris0);
         }
@@ -156,12 +132,8 @@ const CalculateModule = function(calObj) {
       case 'CT':
       case 'ZT':
         bre = _bre;
-        if (hig&&bre&&ces&&tic) {
-          if ((hig>tic)&&(bre>tic)&&(hig>ces)&&(bre>ces)) {
-            calCT();
-          } else {
-            alert(Error_ParisTicBig);
-          }   
+        if (hig&&bre&&dic&&tic) {
+          calCT();
         } else {
           alert(Error_Paris0);
         }
@@ -178,11 +150,7 @@ const CalculateModule = function(calObj) {
       case 'SP':
         Idad = !tic ? 0 : (dad - 2 * tic);
         if (dad&&tic) {
-          if (dad>tic) {
-            calRB();
-          } else {
-            alert(Error_ParisTicBig);
-          }             
+          calRB();
         } else {
           alert(Error_Paris0);
         }        
@@ -192,11 +160,7 @@ const CalculateModule = function(calObj) {
         Rad = radRT();
         rad = !_rad ? (Rad - tic) : _rad;
         if (hig&&bre&&tic) {
-          if ((hig>tic)&&(bre>tic)) {
-            calRT();
-          } else {
-            alert(Error_ParisTicBig);
-          }
+          calRT();
         } else {
           alert(Error_Paris0);
         }
