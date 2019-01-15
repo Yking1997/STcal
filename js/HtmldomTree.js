@@ -248,19 +248,26 @@ opMap.DivIdLies = function() {
 const Meth = function() {
   //更新user对象内的数据
   function UpdateToUser() {
-    let Oc = opMap.opCal,
-      Or = opMap.opRef,
-      Op = opMap.opPar,
-      Odil = opMap.DivIdLies;
+    let Oc = opMap.Cal,
+      Or = opMap.Ref,
+      Op = opMap.Par,
+      Odil = opMap.DivIdLies,
+      isSaveTxtToDiv = true;
     let _shortCode = user.STCode.replace(/[^un|eq|A-Z]/g, '');
     //根据value的key名查找对应prop和unit的key名的值
     for (let key in user.Calvalue) {
+      if (isEmpty( user.Calvalue[key]))  {
+        isSaveTxtToDiv = false;
+      } 
       user.Calprop[key] = copy(Oc.prop[key],true);
       user.Calunit[key] = copy(Oc.unit[key],true);
     }
     //根据value的key名查找对应prop和unit的key名的值
     
       for (let key in user.Refvalue) {
+        if (isEmpty( user.Refvalue[key]))  {
+          isSaveTxtToDiv = false;
+        } 
         user.Refprop[key] = copy(Or.prop[key],true);
         user.Refunit[key] = copy(Or.unit[key],true);
       }
@@ -268,6 +275,9 @@ const Meth = function() {
 
     //根据value的key名查找对应prop和unit的key名的值
     for (let key in user.Parvalue) {
+      if (isEmpty( user.Parvalue[key])) {
+        isSaveTxtToDiv = false;
+      } 
       user.Parprop[key] = copy(Op[_shortCode].prop[key],true);
       user.Parunit[key] = copy(Op[_shortCode].unit[key],true);
     }
@@ -283,7 +293,9 @@ const Meth = function() {
         }
       }
     }
-    saveTxtToDiv();
+    if (isSaveTxtToDiv) {
+      saveTxtToDiv();
+    }
   }
 
   /**
@@ -326,8 +338,7 @@ const Meth = function() {
       compareTxt2: '',
       resultTxt: '',
       middleTxt: '',
-      n: 0,
-      isSave: true
+      n: 0
     };
 
     save.myDate = new Date();
@@ -342,7 +353,7 @@ const Meth = function() {
     save.tailTxt = '计算结果：' + '\n';
 
     for (let key in user.Parvalue) {
-      if (!user.Parvalue[key]) { save.isSave = false; }
+      
       save.headTxt += String(user.Parvalue[key]) + 'x';
       save.middleTxt += String(user.Parprop[key]) + ': ' + String(user.Parvalue[key]) + ' ' + String(user.Parunit[key]) + '\n';
     }
@@ -364,7 +375,7 @@ const Meth = function() {
         }
       }
     };
-    if (save.isSave) {
+    
       for (let k = save.len; k > -1; k--) {
         if (isEmpty(save.txtArr[k]) === false) {
           save.txtArr[k + 1] = copy(save.txtArr[k]);
@@ -372,7 +383,7 @@ const Meth = function() {
       }
       save.txtArr[0] = copy(save.resultTxt);
       opText('saveTxt', save.txtArr);
-    }
+    
   }
   //清空Div在页面显示内容
   function ClearDiv() {
@@ -570,8 +581,9 @@ const Meth = function() {
       obj = arrTxt[i];
       if (!isEmpty(obj.innerHTML)) {
         temptxt = obj.innerHTML;
-        temptxt = temptxt.replace(/(\/|\<|\>|div|br)/g, "");
+        temptxt = temptxt.replace(/(\/|\<|\>|div|br)/g, '');
         temptxt = temptxt.replace(/[^.0-9]/g, '');
+        temptxt = temptxt.replace(/0*(\d*)/,"$1");
         obj.innerText = temptxt;
         obj.innerHTML = temptxt;
       }

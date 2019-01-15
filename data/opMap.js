@@ -1,6 +1,6 @@
 const opMap = {
   //可调参数对应元素名称显示
-  opPar: {
+  Par: {
     eqAI: {
       prop: {
         hig: '等边长',
@@ -209,7 +209,7 @@ const opMap = {
     }
   },
   //查询结构对应的名称显示
-  opRef: {
+  Ref: {
     prop: {
       wg1: '重量',
       are: '截面面积',
@@ -288,7 +288,7 @@ const opMap = {
     }
   },
   //计算结果对应名称显示
-  opCal: {
+  Cal: {
     prop: {
       wg1: '重量',
       are: '截面面积',

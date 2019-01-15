@@ -53,26 +53,18 @@ const CalculateModule = function(calObj) {
       dad = Number(par.dad) || 0,
       bre, rad, Rad, coe, amend, has_rad, Crad, Section,
       Error_Paris0 = '你输入数据有误，请重新输入大于0的数值。';
-
+      Error_ParisTicBig = '你输入的厚度有误，请不要输入大于型钢外尺寸的数值！';
     let CalCode = (STCode) ? STCode.replace(/[^A-Z]/g, '') : alert('错误：缺少型钢类型参数[STCode]');
     switch (CalCode) {
       case 'AI':
         bre = !_bre ? hig : _bre;
         rad = !_rad ? radAI() : _rad;
-        if (hig&&bre) {
-          calAI();
-        } else {
-          alert(Error_Paris0);
-        }
+        checkParameterValidity([hig, bre], [tic], calAI);        
         break;
       case 'LT':
         bre = _bre;
         rad = !_rad ? radAI() : _rad;
-        if (hig&&bre) {
-          calLT();
-        } else {
-          alert(Error_Paris0);
-        }        
+        checkParameterValidity([hig, bre], [tic], calLT);
         break;
       case 'IB':
         bre = _bre;
@@ -80,11 +72,7 @@ const CalculateModule = function(calObj) {
         rad = _rad;
         amend = PI * rad * 2 / 4 * 8;
         Crad = (rad * rad - tic / 3 * tic / 3);
-        if (hig&&bre&&dic&&tic) {
-          calHB();
-        } else {
-          alert(Error_Paris0);
-        }  
+        checkParameterValidity([hig, bre], [dic, tic], calIB);
         break;
       case 'HB':
       case 'WB':
@@ -99,11 +87,7 @@ const CalculateModule = function(calObj) {
           has_rad = false;
         }
         Crad = (has_rad) ? (rad * rad - tic / 3 * tic / 3) : 0;
-        if (hig&&bre&&dic&&tic) {
-          calHB();
-        } else {
-          alert(Error_Paris0);
-        }
+        checkParameterValidity([hig, bre], [dic, tic], calHB);
         break;
       case 'CS':
         coe = 0.349;
@@ -111,11 +95,7 @@ const CalculateModule = function(calObj) {
         rad = _rad;
         Crad = rad * rad - tic / 3 * tic / 3;
         amend = PI * rad * 2 / 4 * 4;
-        if (hig&&bre&&dic&&tic) {
-          calHB();
-        } else {
-          alert(Error_Paris0);
-        }
+        checkParameterValidity([hig, bre], [dic, tic], calHB);
         break;
       case 'TB':
         coe = 0.4292;
@@ -123,54 +103,30 @@ const CalculateModule = function(calObj) {
         rad = _rad;
         Crad = rad * rad - tic / 3 * tic / 3;
         amend = PI * rad * 2 / 4 * 4;
-        if (hig&&bre&&dic&&tic) {
-          calTB();
-        } else {
-          alert(Error_Paris0);
-        }
+        checkParameterValidity([hig, bre], [dic, tic], calTB);
         break;
       case 'CT':
       case 'ZT':
         bre = _bre;
-        if (hig&&bre&&dic&&tic) {
-          calCT();
-        } else {
-          alert(Error_Paris0);
-        }
+        checkParameterValidity([hig, bre], [ces, tic], calCT);
         break;
       case 'RB':
         Idad = !tic ? 0 : (dad - 2 * tic);
-        if (dad) {
-          calRB();
-        } else {
-          alert(Error_Paris0);
-        }        
+        checkParameterValidity([dad], [], calRB);
         break;
       case 'SS':
       case 'SP':
         Idad = !tic ? 0 : (dad - 2 * tic);
-        if (dad&&tic) {
-          calRB();
-        } else {
-          alert(Error_Paris0);
-        }        
+        checkParameterValidity([dad], [tic], calRB);
         break;
       case 'RT':
         bre = !_bre ? hig : _bre;
         Rad = radRT();
         rad = !_rad ? (Rad - tic) : _rad;
-        if (hig&&bre&&tic) {
-          calRT();
-        } else {
-          alert(Error_Paris0);
-        }
+        checkParameterValidity([hig, bre], [tic], calRT);
         break;
       case 'SSP':
-      if (tic) {
-        calSSP();
-      } else {
-        alert(Error_Paris0);
-      }        
+      checkParameterValidity([tic], [], calSSP);
         break;
     }
 
@@ -381,6 +337,35 @@ const CalculateModule = function(calObj) {
         obj = obj.toFixed(3);
       }
       return obj;
+    }
+
+    function checkParameterValidity(extDim, intTic, fn){
+      //extDim = extDim || [];
+      //intTic = intTic || [];
+      //fn = fn || function(){};
+      let paris0 = false,
+          parisTicBig = false;
+      for (let key1 in extDim) {
+        if (!Number(extDim[key1])) {
+          paris0 = true;          
+        }
+        if (!isEmpty(intTic)&&(!paris0)) {
+          for (let key2 in intTic) {
+            if (!Number(intTic[key2])) {
+              paris0 = true;              
+            } else if (Number(intTic[key2]) >= Number(extDim[key1])) {
+              parisTicBig = true;              
+            }
+          }
+        }        
+      }
+      if (paris0) {
+        alert(Error_Paris0);        
+      } else if (parisTicBig) {
+        alert(Error_ParisTicBig);        
+      } else {
+        fn();
+      }
     }
 
     if (CalCode == 'SSP') {
