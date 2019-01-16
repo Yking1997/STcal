@@ -194,7 +194,7 @@ const CalculateModule = function(calObj) {
       Section = PI * (dad * dad - Idad * Idad) / 4;
       are = Section / 100;
       wg = !Idad ? (0.00617 * dad * dad) : (0.02466 * tic * (dad - tic));
-      sare = PI * dad * 2 / 1000;
+      sare = PI * dad / 1000;
       return {
         are: are,
         wg: wg,
