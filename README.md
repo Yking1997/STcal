@@ -26,7 +26,7 @@ All.css                     能适应多种屏幕尺寸界面显示
 1. BassData.js              原始数据
 2. CalculateModule.js       计算模块
 3. FindSTExData.js          查询模块
-4. HtmldomConfig.js         界面相关内容设定
+4. HtmldomTree.js         界面相关内容设定
 5. MakeHTMLdom.js           创见界面
 6. MakeinitData.js          创见查询数据
 7. PublicFunction.js        通用函数
