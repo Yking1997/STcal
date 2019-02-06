@@ -303,3 +303,5 @@ const MakeInitData = function makeInitDataFrom(baseMap = baseMap || {}) {
     return newMap;
 
 };
+
+export {MakeInitData};

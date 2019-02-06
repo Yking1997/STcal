@@ -130,7 +130,7 @@ const HtmldomTree = {
       parentNode: 'main',
       attr: {
         id: 'labFoot',
-        innerHTML: '- 版本1.70.00 -      - @HiDHong -      - 2019-02 -'
+        innerHTML: '- 版本1.60.00 -      - @HiDHong -      - 2018-12 -'
       }
     }
   },
@@ -222,3 +222,5 @@ const HtmldomTree = {
 
   }
 };
+
+export {HtmldomTree};

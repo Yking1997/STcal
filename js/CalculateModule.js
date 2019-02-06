@@ -1,26 +1,4 @@
-/** CalculateModule 型钢重量、截面积、表面积计算模块
- *  calObj 输入参数：对象{}，包含以下格式数据
- *  {
- *    density: density; //必需有，判定型钢密度，
- *    STCode: STCode; //必需有，判定型钢种类，选择相应的计算公式
- *    hig: hig, //高度，可选
- *    bre: bre, //宽度，可选
- *    dic: dic, //腰厚，可选
- *    tic: tic, //边厚度，可选
- *    rad: rad, //内弧度，可选
- *    ces: ces, //突出高度，可选
- *    dad: dad  //直径，可选
- *  }
- *  result 输出结果：对象{}，包含以下格式数据
- *  {
- *    STCode ：STCode, //型钢种类
- *    are: are, //截面面积
- *    wg: wg, //重量
- *    sare: sare //外表面积（不含截面积）
- *  }
- */
-
-const CalculateModule = function(calObj) {
+const CalculateModule = function calculateModule(calObj) {
   console.log('调用函数引用的参数calObj:')
   console.log(calObj);
   console.log();
@@ -384,26 +362,26 @@ const CalculateModule = function(calObj) {
   }
 }
 
-class CalParametric {
-  constructor(STCode, hig, bre, dic, tic, rad, ces, dad) {
-    this.STCode = STCode;
-    this.hig = hig;
-    this.bre = bre;
-    this.dic = dic;
-    this.tic = tic;
-    this.rad = rad;
-    this.ces = ces;
-    this.dad = dad;
-  }
-}
+//export default {CalculateModule};
 
-class CalResult {
-  constructor(are, wg1, sare, wg2) {
-    this.are = are;
-    this.wg1 = wg1;
-    this.sare = sare;
-    this.wg2 = wg2;
-  }
-}
-
-//export default CalculateModule
+/** CalculateModule 型钢重量、截面积、表面积计算模块
+ *  calObj 输入参数：对象{}，包含以下格式数据
+ *  {
+ *    density: density; //必需有，判定型钢密度，
+ *    STCode: STCode; //必需有，判定型钢种类，选择相应的计算公式
+ *    hig: hig, //高度，可选
+ *    bre: bre, //宽度，可选
+ *    dic: dic, //腰厚，可选
+ *    tic: tic, //边厚度，可选
+ *    rad: rad, //内弧度，可选
+ *    ces: ces, //突出高度，可选
+ *    dad: dad  //直径，可选
+ *  }
+ *  result 输出结果：对象{}，包含以下格式数据
+ *  {
+ *    STCode ：STCode, //型钢种类
+ *    are: are, //截面面积
+ *    wg: wg, //重量
+ *    sare: sare //外表面积（不含截面积）
+ *  }
+ */

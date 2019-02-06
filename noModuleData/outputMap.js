@@ -1,4 +1,4 @@
-const opMap = {
+var outputMap = {
   //可调参数对应元素名称显示
   Par: {
     eqAI: {
@@ -308,4 +308,4 @@ const opMap = {
   tabRef: '',
   tabCal: '',
   saveTxtArr: new Array(9)
-};
+}

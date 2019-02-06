@@ -1,16 +1,4 @@
-/** FindSTExData 查找型钢截面力学数据
- *
- * 参数.byNameAndIndex(STCode, index)
- *     STCode: 型钢种类
- *     index: 索引项
- *
- * 参数.byCalParametric(obj)
- *     obj: 型钢规格参数{带STCode}
- *
- * 返回result:{}包含查找符合initMap条件的数据
- */
-
-const FindSTExData = function(obj) {
+const FindSTExData = function findSTExData(obj) {
   let result = {}, //new FindSTResult(),
     findParametric = {},
     STCode = (obj.STCode) ? copy(obj.STCode, true) : undefined,
@@ -142,37 +130,16 @@ const FindSTExData = function(obj) {
 
 };
 
-class FindSTResult {
-  constructor(STCode, wg1, wg2, are, Sare, Ix, Ix0, Ix1, Iy, Iy0, iυ, rx, ry, Wx, Wx0, Wy, Wy0, Wymax, Wymin, Wυ, Sx, Sy, It, Ct, Cx, X0, Y0, Z0, ty, tanα) {
-    this.STCode = STCode;
-    this.wg1 = wg1;
-    this.wg2 = wg2;
-    this.are = are;
-    this.Sare = Sare;
-    this.Ix = Ix;
-    this.Ix0 = Ix0;
-    this.Ix1 = Ix1;
-    this.Iy = Iy;
-    this.Iy0 = Iy0;
-    this.iυ = iυ;
-    this.rx = rx;
-    this.ry = ry;
-    this.Wx = Wx;
-    this.Wx0 = Wx0;
-    this.Wy = Wy;
-    this.Wy0 = Wy0;
-    this.Wymax = Wymax;
-    this.Wymin = Wymin;
-    this.Wυ = Wυ;
-    this.Sx = Sx;
-    this.Sy = Sy;
-    this.It = It;
-    this.Ct = Ct;
-    this.Cx = Cx;
-    this.X0 = X0;
-    this.Y0 = Y0;
-    this.Z0 = Z0;
-    this.ty = ty;
-    this.tanα = tanα;
-  }
-}
+//export default {FindSTExData};
+
+/** FindSTExData 查找型钢截面力学数据
+ *
+ * 参数.byNameAndIndex(STCode, index)
+ *     STCode: 型钢种类
+ *     index: 索引项
+ *
+ * 参数.byCalParametric(obj)
+ *     obj: 型钢规格参数{带STCode}
+ *
+ * 返回result:{}包含查找符合initMap条件的数据
+ */
