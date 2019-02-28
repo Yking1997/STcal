@@ -50,7 +50,7 @@ const CalculateModule = function calculateModule(calObj) {
         rad = _rad;
         amend = PI * rad * 2 / 4 * 8;
         Crad = (rad * rad - tic / 3 * tic / 3);
-        checkParameterValidity([hig, bre], [dic, tic], calIB);
+        checkParameterValidity([hig, bre], [dic, tic], calHB);
         break;
       case 'HB':
       case 'WB':

@@ -94,14 +94,16 @@ const HtmldomTree = {
       type: 'div',
       parentNode: 'main',
       attr: {
-        innerHTML: '型钢可调整参数列表'
+        innerHTML: '型钢可调整参数列表',
+        title: '需要在‘型钢查询种类选项’中选好‘类型’及‘型号’才能出现参数调整'
       }
     },
     lab04: {
       type: 'div',
       parentNode: 'main',
       attr: {
-        innerHTML: '型钢计算结果'
+        innerHTML: '型钢计算结果',
+        title: '作为参考结果，以‘型钢截面特性查询结果’为准'
       }
     },
     lab05: {
@@ -122,7 +124,8 @@ const HtmldomTree = {
       type: 'div',
       parentNode: 'main',
       attr: {
-        innerHTML: '历史查询'
+        innerHTML: '历史查询',
+        title: '记录最近9次查询结果'
       }
     },
     lab08: {
