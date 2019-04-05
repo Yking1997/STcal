@@ -337,7 +337,7 @@ const Meth = function() {
       compareTxt2: '',
       resultTxt: '',
       middleTxt: '',
-      n: 0
+      isSave: true
     };
 
     save.myDate = new Date();
@@ -353,28 +353,28 @@ const Meth = function() {
 
     for (let key in user.Parvalue) {
       
-      save.headTxt += String(user.Parvalue[key]) + 'x';
+      save.headTxt += String(user.Parvalue[key]) + `×`;
       save.middleTxt += String(user.Parprop[key]) + ': ' + String(user.Parvalue[key]) + ' ' + String(user.Parunit[key]) + '\n';
     }
-    save.headTxt = save.headTxt.substring(0, save.headTxt.lastIndexOf('x')) + '\n';
+    save.headTxt = save.headTxt.substring(0, save.headTxt.lastIndexOf(`×`)) + '\n';
 
     for (let key in user.Calvalue) {
       save.tailTxt += String(user.Calprop[key]) + ': ' + String(user.Calvalue[key]) + ' ' + String(user.Calunit[key]) + '\n';
     }
     save.resultTxt = save.headTxt + '\n' + save.middleTxt + '\n' + save.tailTxt + '\n';
-
+    //用compareTxt比较，清除重复项
     save.compareTxt1 = save.resultTxt;
-    save.compareTxt2 = save.compareTxt1.substring(save.compareTxt1.indexOf(']'), save.compareTxt1.length);
-    for (let i = 0; i < save.len; i++) {
+    save.compareTxt1 = save.compareTxt1.substring(save.compareTxt1.indexOf(']'), save.compareTxt1.length);
+    for (let i = save.len; i > -1; i--) {
       if (isEmpty(save.txtArr[i]) === false) {
         save.compareTxt2 = save.txtArr[i].toString();
         save.compareTxt2 = save.compareTxt2.substring(save.compareTxt2.indexOf(']'), save.compareTxt2.length);
         if (save.compareTxt1 === save.compareTxt2) {
-          save.isSave = false;
+          save.txtArr.splice(i,1);          
         }
       }
     };
-    
+    //整理数组，全部向后移一位,空出0键值存入新数据
       for (let k = save.len; k > -1; k--) {
         if (isEmpty(save.txtArr[k]) === false) {
           save.txtArr[k + 1] = copy(save.txtArr[k]);
