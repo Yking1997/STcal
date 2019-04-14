@@ -1,120 +1,132 @@
-baseMap = {
-    h08eqAI: copy(h08eqAI, true),
-    h08unAI: copy(h08unAI, true), 
-    h08LT: copy(h08LT, true),
-    h08CS: copy(h08CS, true),
-    h08IB: copy(h08IB, true),
-    h08RB1: copy(h08RB1, true),
-    h08RB2: copy(h08RB2, true),
-    h10CT: copy(h10CT, true),
-    h10HB: copy(h10HB, true),
-    h10HM: copy(h10HM, true),
-    h10HN: copy(h10HN, true),
-    h10HP: copy(h10HP, true),
-    h10HT: copy(h10HT, true),
-    h10HW: copy(h10HW, true),
-    h10SP: copy(h10SP, true),
-    h10SS: copy(h10SS, true),
-    h10TB: copy(h10TB, true),
-    h10TM: copy(h10TM, true),
-    h10TN: copy(h10TN, true),
-    h10TW: copy(h10TW, true),
-    h10W14: copy(h10W14, true),
-    h10W24: copy(h10W24, true),
-    h10W36: copy(h10W36, true),
-    h10W40: copy(h10W40, true),
-    h10W44: copy(h10W44, true),
-    h10WB: copy(h10WB, true),
-    h10ZT: copy(h10ZT, true),
-    h17HB: copy(h17HB, true),
-    h17HM: copy(h17HM, true),
-    h17HN: copy(h17HN, true),
-    h17HT: copy(h17HT, true),
-    h17HW: copy(h17HW, true),
-    h17TB: copy(h17TB, true),
-    h17TM: copy(h17TM, true),
-    h17TN: copy(h17TN, true),
-    h17TW: copy(h17TW, true),
-    h17W14: copy(h17W14, true),
-    h17W24: copy(h17W24, true),
-    h17W36a: copy(h17W36a, true),
-    h17W36b: copy(h17W36b, true),
-    h17W40a: copy(h17W40a, true),
-    h17W40b: copy(h17W40b, true),
-    h17W44: copy(h17W44, true),
-    h17WB: copy(h17WB, true),
-    heqRT: copy(heqRT, true),
-    hunRT: copy(hunRT, true),
-    ceqRT: copy(ceqRT, true),
-    cunRT: copy(cunRT, true),
-    fSSP: copy(fSSP, true),
-    tSSP: copy(tSSP, true)
-};
-opMap =  copy(outputMap, true);
-initMap =  copy(MakeInitData(baseMap), true);
-       
+const startTime = Date.now();
+const importFilePath = `./`;
+const noRepeatFileNames = [
+    'ceqRT',
+    'cunRT',
+    'fSSP',
+    'tSSP',
+    'heqRT',
+    'hunRT',
+    'h08CS',
+    'h08eqAI',
+    'h08IB',
+    'h08LT',
+    'h08RB1',
+    'h08RB2',
+    'h08unAI',
+    'h10CT',
+    'h10ZT',
+    'h10SP',
+    'h10SS',
+    'h10HP',
+    'h10W36',
+    'h10W40',
+    'h17W36a',
+    'h17W36b',
+    'h17W40a',
+    'h17W40b'
+];
+const repeatFirstNames = ['h10', 'h17'];
+const repeatLastNames = [
+    'HB',
+    'HM',
+    'HN',
+    'HT',
+    'HW',
+    'TB',
+    'TM',
+    'TN',
+    'TW',
+    'WB',
+    'W14',
+    'W24',
+    'W44'
+];
 
-window.onload = App();
+
+var tempFn = {};
+
+let fileNames = (function () {
+    let fileNames = [...noRepeatFileNames];
+    for (let first of repeatFirstNames) {
+        for (let last of repeatLastNames) {
+            fileNames.push(`${first}${last}`);
+        }
+    }
+    return fileNames;
+})();
+
+const loadImportModule = (obj = {}, name, src) => {
+    import (src)
+        .then((module) => {
+            if ((name in module) && !(name in obj)) {
+                obj[name] = copy(module[name], true);
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    };
+
+async function importMode(obj, names, path) {
+    if (isArray(names)) {
+        for (let name of names) {
+            let src =  `${path}${name}.js`;           
+            loadImportModule(obj, name, src);
+            console.log(`Import '${name}' to useTime ${Date.now() - startTime}ms`);
+        }
+    } else if (typeof names == 'string'){
+        let name = names;
+        let src =  `${path}${name}.js`;
+        loadImportModule(obj, name, src);
+        console.log(`Import '${name}' to useTime ${Date.now() - startTime}ms`);
+    }
+    
+
+}
+
+
+importMode(baseMap, fileNames, importFilePath);
+importMode(tempFn, 'MakeInitData', importFilePath);
+importMode(tempFn, 'outputMap', importFilePath);
+importMode(tempFn, 'HtmldomTree', importFilePath);
+
+/*由于in 操作符只要通过对象能够访问到属性就返回true，hasOwnProperty()只在属性存在于
+实例中时才返回true，因此只要in 操作符返回true 而hasOwnProperty()返回false，就可以确
+定属性是原型中的属性*/
+function hasPrototypeProperty(object, name){
+    return object.hasOwnProperty(name) && (name in object);
+}
+
+function isMakeBaseMapComplete() {
+    let object = baseMap;
+    for (let name of fileNames) {
+        if (!hasPrototypeProperty(object, name)) return false;
+    }
+    return true;
+}
+
+var TIMEOUT = 100;
+setTimeout(function timeoutFunc() {    
+    requestIdleCallback(function () {        
+        if (isMakeBaseMapComplete()) {                      
+            opMap =  copy(tempFn.outputMap, true);
+            initMap =  copy(tempFn.MakeInitData(baseMap), true);
+            window.onload = App();
+        } else {
+            setTimeout(timeoutFunc, TIMEOUT);            
+        }
+
+    });
+}, TIMEOUT);
+
 function App() {
     
    getopMapNumParCalRef(initMap, opMap);
-   makeEleForDiv(HtmldomTree, initMap, opMap);
+   makeEleForDiv(tempFn.HtmldomTree, initMap, opMap);
    setSelectNull('selSTList');
    opMap.DivIdLies = makeopMapDivIdLies();
    makealtDivMeth();
    baseMap = Object.create(null);
+   tempFn = Object.create(null);
 };
-
-import {h08eqAI} from './h08eqAI.js';
-import {h08unAI} from './h08unAI.js';
-import {h08LT} from './h08LT.js';
-import {h08CS} from './h08CS.js';
-import {h08IB} from './h08IB.js';
-import {h08RB1} from './h08RB1.js';
-import {h08RB2} from './h08RB2.js';
-import {h10CT} from './h10CT.js';
-import {h10HB} from './h10HB.js';
-import {h10HM} from './h10HM.js';
-import {h10HN} from './h10HN.js';
-import {h10HP} from './h10HP.js';
-import {h10HT} from './h10HT.js';
-import {h10HW} from './h10HW.js';
-import {h10SP} from './h10SP.js';
-import {h10SS} from './h10SS.js';
-import {h10TB} from './h10TB.js';
-import {h10TM} from './h10TM.js';
-import {h10TN} from './h10TN.js';
-import {h10TW} from './h10TW.js';
-import {h10W14} from './h10W14.js';
-import {h10W24} from './h10W24.js';
-import {h10W36} from './h10W36.js';
-import {h10W40} from './h10W40.js';
-import {h10W44} from './h10W44.js';
-import {h10WB} from './h10WB.js';
-import {h10ZT} from './h10ZT.js';
-import {h17HB} from './h17HB.js';
-import {h17HM} from './h17HM.js';
-import {h17HN} from './h17HN.js';
-import {h17HT} from './h17HT.js';
-import {h17HW} from './h17HW.js';
-import {h17TB} from './h17TB.js';
-import {h17TM} from './h17TM.js';
-import {h17TN} from './h17TN.js';
-import {h17TW} from './h17TW.js';
-import {h17W14} from './h17W14.js';
-import {h17W24} from './h17W24.js';
-import {h17W36a} from './h17W36a.js';
-import {h17W36b} from './h17W36b.js';
-import {h17W40a} from './h17W40a.js';
-import {h17W40b} from './h17W40b.js';
-import {h17W44} from './h17W44.js';
-import {h17WB} from './h17WB.js';
-import {heqRT} from './heqRT.js';
-import {hunRT} from './hunRT.js';
-import {ceqRT} from './ceqRT.js';
-import {cunRT} from './cunRT.js';
-import {fSSP} from './fSSP.js';
-import {tSSP} from './tSSP.js';
-import {outputMap} from './outputMap.js';
-import {MakeInitData} from './MakeInitData.js';
-import {HtmldomTree} from './HtmldomTree.js';
