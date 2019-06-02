@@ -68,7 +68,7 @@ const loadImportModule = (obj = {}, name, src) => {
         })
     };
 
-async function importMode(obj, names, path) {
+function importMode(obj, names, path) {
     if (isArray(names)) {
         for (let name of names) {
             let src =  `${path}${name}.js`;           
