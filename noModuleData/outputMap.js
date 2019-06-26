@@ -199,7 +199,7 @@ var outputMap = {
         tic: '毫米'
       }
     },
-    SSP: {
+    PL: {
       prop: {
         tic: '平均厚度'
       },
@@ -251,15 +251,15 @@ var outputMap = {
     },
     unit: {
       wg1: 'kg/m',
-      are: 'cm^2',
-      Sare: 'm^2/m',
-      Ix: 'cm^4',
-      Ix0: 'cm^4',
-      Ix1: 'cm^4',
-      Iy: 'cm^4',
-      Iy0: 'cm^4',
-      Iy1: 'cm^4',
-      Iυ: 'cm^4',
+      are: 'cm²',
+      Sare: 'm²/m',
+      Ix: 'cm⁴',
+      Ix0: 'cm⁴',
+      Ix1: 'cm⁴',
+      Iy: 'cm⁴',
+      Iy0: 'cm⁴',
+      Iy1: 'cm⁴',
+      Iυ: 'cm⁴',
       ix: 'cm',
       ix0: 'cm',
       ix1: 'cm',
@@ -269,23 +269,23 @@ var outputMap = {
       rx: 'cm',
       ry: 'cm',
       rv: 'cm',
-      Wx: 'cm^3',
-      Wx0: 'cm^3',
-      Wy: 'cm^3',
-      Wy0: 'cm^3',
-      Wymax: 'cm^3',
-      Wymin: 'cm^3',
-      Wυ: 'cm^3',
-      Sx: 'cm^3',
-      Sy: 'cm^3',
-      It: 'cm^4',
-      Ct: 'cm^4',
+      Wx: 'cm³',
+      Wx0: 'cm³',
+      Wy: 'cm³',
+      Wy0: 'cm³',
+      Wymax: 'cm³',
+      Wymin: 'cm³',
+      Wυ: 'cm³',
+      Sx: 'cm³',
+      Sy: 'cm³',
+      It: 'cm⁴',
+      Ct: 'cm⁴',
       Cx: 'cm',
       X0: 'cm',
       Y0: 'cm',
       Z0: 'cm',
       ty: 'cm',
-      wg2: 'kg/m^2',
+      wg2: 'kg/m²',
       tanα: '系数'
     }
   },
@@ -299,9 +299,9 @@ var outputMap = {
     },
     unit: {
       wg1: 'kg/m',
-      are: 'cm^2',
-      sare: 'm^2/m',
-      wg2: 'kg/m^2'
+      are: 'cm²',
+      sare: 'm²/m',
+      wg2: 'kg/m²'
     }
   },
   tabPar: '',

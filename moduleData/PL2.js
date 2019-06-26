@@ -1,9 +1,9 @@
 //var baseMap = (baseMap) ? baseMap : {};
-var fSSP = {
+var PL2 = {
   symbol: '- ',
   chinese: '薄钢板',
   english: 'steel sheet(s) and plate(s)',
-  calculate: 'calSSP',
+  calculate: 'calPL',
   output: ['wg2', 'are'],
   dataPar: ['tic'],
   data: [],
@@ -44,4 +44,4 @@ var fSSP = {
   ]
 }
 
-export {fSSP};
+export {PL2};

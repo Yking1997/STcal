@@ -1,8 +1,8 @@
 //var baseMap = (baseMap) ? baseMap : {};
-var tSSP = {
+var PL1 = {
   symbol: '— ',
   chinese: '厚钢板',
-  calculate: 'calSSP',
+  calculate: 'calsPL',
   english: 'Thick Steel plate',
   output: ['wg2', 'are'],
   dataPar: ['tic'],
@@ -47,4 +47,4 @@ var tSSP = {
   ]
 }
 
-export {tSSP};
+export {PL1};

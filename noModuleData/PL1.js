@@ -1,8 +1,8 @@
 var baseMap = (baseMap) ? baseMap : {};
-baseMap.tSSP = {
+baseMap.PL1 = {
   symbol: '— ',
   chinese: '厚钢板',
-  calculate: 'calSSP',
+  calculate: 'calsPL',
   english: 'Thick Steel plate',
   output: ['wg2', 'are'],
   dataPar: ['tic'],
@@ -44,5 +44,5 @@ baseMap.tSSP = {
     [54],
     [56],
     [58]
-  ],
+  ]
 }

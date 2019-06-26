@@ -3,8 +3,8 @@ const importFilePath = `./`;
 const noRepeatFileNames = [
     'ceqRT',
     'cunRT',
-    'fSSP',
-    'tSSP',
+    'PL1',
+    'PL2',
     'heqRT',
     'hunRT',
     'h08CS',

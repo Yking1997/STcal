@@ -74,10 +74,10 @@ const CalculateModule = (calObj = {}) => {
                 'sare', 0
             ],
             [
-                'Error_Paris0', '你输入数据有误，请重新输入大于0的数值。'
+                'Error_isPar0', '你输入数据有误，请重新输入大于0的数值。'
             ],
             [
-                'Error_ParisTicBig', '你输入的厚度有误，请不要输入大于型钢外尺寸的数值'
+                'Error_isTicBig', '你输入的厚度有误，请不要输入大于型钢外尺寸的数值'
             ]
         ])
     };
@@ -242,13 +242,13 @@ const CalculateModule = (calObj = {}) => {
                 }
             ],
             [
-                /^SSP$/, () => {
-                    checkParameterValidity([that.tic], [], cal.SSP);
+                /^PL$/, () => {
+                    checkParameterValidity([that.tic], [], cal.PL);
                 }
             ]
         ])
     }
-
+    //根据Calfn数组键值进行选择计算公式
     const selCalfn = () => {
         let res;
         let action = [...calfn()].filter(
@@ -268,7 +268,7 @@ const CalculateModule = (calObj = {}) => {
             that.sare = (
                 (that.hig + that.bre) * 2 - (that.tic * 2) - 2 * that.rad + that.PI * that.rad * 2 / 2
             ) / 1000;
-            return {are: that.are, wg: that.wg, sare: that.sare}
+            return {are: that.are, wg1: that.wg1, sare: that.sare}
         },
 
         LT: () => {
@@ -280,7 +280,7 @@ const CalculateModule = (calObj = {}) => {
             that.sare = (
                 (that.hig + that.bre) * 2 - (that.dic + that.tic) - (that.rad + that.rad / 2) + that.PI * (that.rad + that.rad / 2) * 2 / 4
             ) / 1000 * 1;
-            return {are: that.are, wg: that.wg, sare: that.sare}
+            return {are: that.are, wg1: that.wg1, sare: that.sare}
         },
 
         HB: () => {
@@ -292,7 +292,7 @@ const CalculateModule = (calObj = {}) => {
             that.sare = (
                 (that.hig + that.bre) * 2 + (that.bre * 2) - (that.dic * 2) - (that.tic * 4) + that.amend - 12 * that.rad
             ) / 1000;
-            return {are: that.are, wg: that.wg, sare: that.sare}
+            return {are: that.are, wg1: that.wg1, sare: that.sare}
         },
 
         TB: () => {
@@ -304,7 +304,7 @@ const CalculateModule = (calObj = {}) => {
             that.sare = (
                 (that.hig + that.bre) * 2 - (that.dic * 1) - (that.tic * 2) + that.amend - 6 * that.rad
             ) / 1000;
-            return {are: that.are, wg: that.wg, sare: that.sare}
+            return {are: that.are, wg1: that.wg1, sare: that.sare}
         },
 
         CT: () => {
@@ -314,7 +314,7 @@ const CalculateModule = (calObj = {}) => {
             that.sare = (
                 (that.hig + that.bre + that.ces) * 2 - (that.dic * 2) - (that.tic * 2)
             ) / 1000;
-            return {are: that.are, wg: that.wg, sare: that.sare}
+            return {are: that.are, wg1: that.wg1, sare: that.sare}
         },
 
         RB: () => {
@@ -324,7 +324,7 @@ const CalculateModule = (calObj = {}) => {
                 ? (0.00617 * that.dad * that.dad)
                 : (0.02466 * that.tic * (that.dad - that.tic));
             that.sare = that.PI * that.dad / 1000;
-            return {are: that.are, wg: that.wg, sare: that.sare}
+            return {are: that.are, wg1: that.wg1, sare: that.sare}
         },
 
         RT: () => {
@@ -336,10 +336,10 @@ const CalculateModule = (calObj = {}) => {
             that.sare = (
                 2 * (that.hig - that.tic + that.bre - that.tic) + that.PI * that.Rad * 2 / 4 * 4
             ) / 100;
-            return {are: that.are, wg: that.wg, sare: that.sare}
+            return {are: that.are, wg1: that.wg1, sare: that.sare}
         },
 
-        SSP: () => {
+        PL: () => {
             that.wg2 = that.density * that.tic;
             that.are = that.tic * 1000 / 100;
             return {are: that.are, wg2: that.wg2}
@@ -464,26 +464,26 @@ const CalculateModule = (calObj = {}) => {
                 ]
             ])
         },
-
+        //由于RT的rad带小数据，所以要增加小数匹配
         RT: () => {
             return new Map([
                 [
                     /^0$/, 'error_0'
                 ],
                 [
-                    /^[1-3]$/, 1.5
+                    /^([1-3])|([1-2]+\.\d+)$/, 1.5
                 ],
                 [
-                    /^[4-6]$/, 2
+                    /^([4-6])|([4-5]+\.\d+)$/, 2
                 ],
                 [
-                    /^[7-9]|(10)$/, 2.5
+                    /^[7-9]|([7-9]+\.\d+)|(10)$/, 2.5
                 ],
                 [
-                    /^(1[1-6])$/, 3
+                    /^(1[1-6])|(1[1-6]+\.\d+)$/, 3
                 ],
                 [
-                    /^(1[7-9])|([2-9][0-9])$/, 3.5
+                    /^(1[7-9])|(1[7-9]+\.\d+)|([2-9][0-9])|([2-9][0-9]+\.\d+)$/, 3.5
                 ]
             ])
         }
@@ -523,39 +523,46 @@ const CalculateModule = (calObj = {}) => {
         }
         return obj;
     }
-
+    /**
+     *  checkParameterValidity : 检查输入参数是否为0或厚度大于外尺寸的错误。
+     * @param {*} extDim 待检查第一组参数（长、宽、高），数组
+     * @param {*} intTic 待检查第二组参数（厚、边厚），数组
+     * @param {*} fn 运行的计算公式
+     * res 返回错误提示或进行正确运算 
+     */
     const checkParameterValidity = (extDim = [], intTic = [], fn = function () {}) => {
-        let paris0 = true,
-            parisTicBig = true,
+        let isPar0 = false,
+            isTicBig = false,
             res;
         for (let key1 in extDim) {
-            paris0 = (Number(extDim[key1]))
+            isPar0 = (!Number(extDim[key1]))
                 ? true
                 : false;
 
-            if (!isEmpty(intTic) && (paris0)) {
+            if (intTic.length != 0 && (!isPar0)) {
                 for (let key2 in intTic) {
-                    paris0 = (Number(intTic[key2]))
+                    isPar0 = (!Number(intTic[key2]))
                         ? true
                         : false;
-                    parisTicBig = (Number(extDim[key1]) > Number(intTic[key2]))
+                    //由于intTic是数组，第一次比较可能出现true;为逼免第二次比较为false会复盖ticisBig
+                    isTicBig = ((isTicBig) || Number(intTic[key2]) >= Number(extDim[key1]))
                         ? true
                         : false;
                 }
             }
         }
-        res = (paris0)
-            ? (
-                (parisTicBig)
-                    ? fn()
-                    : alert(that.Error_ParisTicBig)
+        res = (isPar0)
+            ? alert(that.Error_isPar0)
+            : (
+                (isTicBig)
+                    ? alert(that.Error_isTicBig)
+                    : fn()
             )
-            : alert(that.Error_Paris0);
         return res;
     }
 
     selCalfn();
-    if (that.CalCode == 'SSP') {
+    if (that.CalCode == 'PL') {
         return {
             are: numToFixed(that.are),
             wg2: numToFixed(that.wg2)
